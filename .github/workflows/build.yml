@@ -29,7 +29,7 @@ jobs:
       
       - id: version
         run: |
-          echo "VERSION=$(cat version)\n" >> $GITHUB_OUTPUT
+          echo "VERSION=$(cat version)" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
