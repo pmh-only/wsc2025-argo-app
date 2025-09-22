@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  nginx-deploy
+  namespace: wsc2025
+  labels:
+    app:  nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  nginx
+    spec:
+      terminationGracePeriodSeconds: 60
+      serviceAccountName: nginx
+      restartPolicy: Always
+      # topologySpreadConstraints:
+      #   - maxSkew: 1
+      #     topologyKey: capacity-spread
+      #     whenUnsatisfiable: DoNotSchedule
+      #     labelSelector:
+      #       matchLabels:
+      #         app: nginx
+      containers:
+      - name:  nginx
+        image: 972209100553.dkr.ecr.ap-southeast-1.amazonaws.com/app-repo:latest
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sleep", "45"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        # env:
+        # - name: DB_HOST
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: nginx
+        #       key: DB_HOST
+        # - name: DB_PASS
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: nginx
+        #       key: DB_PASS
+        # - name: DB_USER
+        #   value: dbuser
+        ports:
+        - containerPort: 80
+          name:  nginx
