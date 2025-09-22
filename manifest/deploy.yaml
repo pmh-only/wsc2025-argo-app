@@ -20,7 +20,6 @@ spec:
         app:  nginx
     spec:
       terminationGracePeriodSeconds: 60
-      serviceAccountName: nginx
       restartPolicy: Always
       # topologySpreadConstraints:
       #   - maxSkew: 1
